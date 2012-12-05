@@ -4,5 +4,5 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 public interface Handler {
-	public String handle(LinkedList<String> args) throws IOException;
+    public String handle(LinkedList<String> args) throws IOException;
 }
