@@ -10,10 +10,16 @@
 
 package com.crawlicious.filesystem.entities;
 
+import com.crawlicious.filesystem.exceptions.ChildParentCycleException;
+import com.crawlicious.filesystem.exceptions.EntityMustBeContainedException;
+import com.crawlicious.filesystem.exceptions.EntityNotContainableException;
+import com.crawlicious.filesystem.exceptions.EntityNotContainerException;
+import com.crawlicious.filesystem.exceptions.PathExistsException;
+
 
 public class Drive extends ContainerEntity {
-    public Drive(String name) {
-        super(Entity.Type.DRIVE, fixName(name));
+    public Drive(AllDrives drives, String name) throws EntityNotContainableException, EntityNotContainerException, PathExistsException, EntityMustBeContainedException, ChildParentCycleException {
+        super(drives, Entity.Type.DRIVE, fixName(name));
     }
 
     public static String fixName(String name) {

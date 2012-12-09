@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.crawlicious.filesystem.exceptions.ChildParentCycleException;
+import com.crawlicious.filesystem.exceptions.EntityMustBeContainedException;
 import com.crawlicious.filesystem.exceptions.EntityNotContainableException;
 import com.crawlicious.filesystem.exceptions.EntityNotContainerException;
 import com.crawlicious.filesystem.exceptions.PathExistsException;
@@ -22,8 +24,8 @@ import com.crawlicious.filesystem.exceptions.PathNotFoundException;
 public abstract class ContainerEntity extends Entity {
     private Map<String, Entity> children = new HashMap<String, Entity>();
 
-    public ContainerEntity(Type type, String name) {
-        super(type, name);
+    public ContainerEntity(ContainerEntity parent, Type type, String name) throws EntityNotContainableException, EntityNotContainerException, PathExistsException, EntityMustBeContainedException, ChildParentCycleException {
+        super(parent, type, name);
     }
 
     @Override
@@ -55,6 +57,7 @@ public abstract class ContainerEntity extends Entity {
         } else if (! child.mustBeContained() && ! this.isMaster() ) {
             throw new EntityNotContainableException(child.getName());
         }
+//        System.out.println("HI, i am " + this + " and putting into children, name=" + child.getName() + " object=" + child);
         children.put(child.getName(), child);
     }
 

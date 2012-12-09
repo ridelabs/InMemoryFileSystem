@@ -16,15 +16,17 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
-
 import com.crawlicious.filesystem.entities.AllDrives;
+import com.crawlicious.filesystem.entities.ContainerEntity;
 import com.crawlicious.filesystem.entities.Drive;
 import com.crawlicious.filesystem.entities.Entity;
+import com.crawlicious.filesystem.entities.Entity.Type;
 import com.crawlicious.filesystem.entities.Folder;
 import com.crawlicious.filesystem.entities.TextFile;
 import com.crawlicious.filesystem.entities.ZipFile;
-import com.crawlicious.filesystem.entities.Entity.Type;
 import com.crawlicious.filesystem.exceptions.ChildParentCycleException;
+import com.crawlicious.filesystem.exceptions.EntityMustBeContainedException;
+import com.crawlicious.filesystem.exceptions.EntityNotContainableException;
 import com.crawlicious.filesystem.exceptions.EntityNotContainerException;
 import com.crawlicious.filesystem.exceptions.IllegalFileSystemOperationException;
 import com.crawlicious.filesystem.exceptions.NotATextFileException;
@@ -32,7 +34,11 @@ import com.crawlicious.filesystem.exceptions.PathExistsException;
 import com.crawlicious.filesystem.exceptions.PathNotFoundException;
 
 public class FileSystem {
-    private AllDrives allDrives = new AllDrives();
+    private AllDrives allDrives;
+    
+    public FileSystem() throws EntityNotContainableException, EntityNotContainerException, PathExistsException, EntityMustBeContainedException, ChildParentCycleException {
+        allDrives = new AllDrives();
+    }
 
     public void printTree()  throws IllegalFileSystemOperationException {
         System.out.println("----------- Printing the whole file system tree -------");
@@ -57,7 +63,6 @@ public class FileSystem {
         if (pieces.get(0).equals(AllDrives.containerName)) {
             pieces.remove(0);
         }
-//        System.out.println("finding entity, path=" + path);
         return findEntity(allDrives, pieces, path);
     }
 
@@ -79,23 +84,23 @@ public class FileSystem {
 
     public void create(Type type, String path, String name) throws PathNotFoundException, PathExistsException, IllegalFileSystemOperationException, ChildParentCycleException {
         // could introspect or dependency inject these, but it is late and I am ready to finish
-        Entity entity = null;
         if (type == Type.DRIVE) { // we ignore path
-            entity = new Drive(name);
-            entity.setParent(allDrives);
+            new Drive(allDrives, name);
         } else {
+            Entity proposedParent = findEntity(path);
+            if (! (proposedParent instanceof ContainerEntity)) {
+                throw new EntityNotContainerException(path);
+            }
+            ContainerEntity parent = (ContainerEntity) proposedParent;
             if (type == Type.FOLDER) {
-                entity = new Folder(name);
+                new Folder(parent, name);
             } else if (type == Type.TEXT_FILE) {
-//                System.out.println("hi , we are making a text file with name=" + name);
-                entity = new TextFile(name);
+                new TextFile(parent, name);
             } else if (type == Type.ZIP_FILE) {
-                entity = new ZipFile(name);
+                new ZipFile(parent, name);
             } else {
                 throw new IllegalFileSystemOperationException("Bad Type!");
             }
-//            System.out.println("hi, for entity=" + entity.getName() + " we are setting parent=" + path + " path...");
-            entity.setParent(findEntity(path));
         }
     }
 

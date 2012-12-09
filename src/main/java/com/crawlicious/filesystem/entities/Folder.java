@@ -10,8 +10,14 @@
 
 package com.crawlicious.filesystem.entities;
 
+import com.crawlicious.filesystem.exceptions.ChildParentCycleException;
+import com.crawlicious.filesystem.exceptions.EntityMustBeContainedException;
+import com.crawlicious.filesystem.exceptions.EntityNotContainableException;
+import com.crawlicious.filesystem.exceptions.EntityNotContainerException;
+import com.crawlicious.filesystem.exceptions.PathExistsException;
+
 public class Folder extends ContainerEntity {
-    public Folder(String name) {
-        super(Entity.Type.FOLDER, name);
+    public Folder(ContainerEntity parent, String name) throws EntityNotContainableException, EntityNotContainerException, PathExistsException, EntityMustBeContainedException, ChildParentCycleException {
+        super(parent, Entity.Type.FOLDER, name);
     }
 }

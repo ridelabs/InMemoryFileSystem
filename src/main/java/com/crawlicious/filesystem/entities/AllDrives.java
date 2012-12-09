@@ -10,12 +10,18 @@
 
 package com.crawlicious.filesystem.entities;
 
+import com.crawlicious.filesystem.exceptions.ChildParentCycleException;
+import com.crawlicious.filesystem.exceptions.EntityMustBeContainedException;
+import com.crawlicious.filesystem.exceptions.EntityNotContainableException;
+import com.crawlicious.filesystem.exceptions.EntityNotContainerException;
+import com.crawlicious.filesystem.exceptions.PathExistsException;
+
 
 public class AllDrives extends ContainerEntity {
 
     public static final String containerName = "AllDrives#";
-    public AllDrives() {
-        super(Type.ALL_DRIVES, containerName);
+    public AllDrives() throws EntityNotContainableException, EntityNotContainerException, PathExistsException, EntityMustBeContainedException, ChildParentCycleException {
+        super(null, Type.ALL_DRIVES, containerName);
     }
 
     /*package*/ boolean isMaster() { return true; }

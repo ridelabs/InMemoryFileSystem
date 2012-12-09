@@ -29,9 +29,12 @@ public abstract class Entity {
     private Entity parent;
     private String name;
 
-    public Entity(Type type, String name) {
+    public Entity(ContainerEntity parent, Type type, String name) throws EntityNotContainableException, EntityNotContainerException, PathExistsException, EntityMustBeContainedException, ChildParentCycleException {
         this.type = type;
         this.name = name;
+        if (parent != null) {
+            setParent(parent);
+        }
     }
 
     public String getPath() {

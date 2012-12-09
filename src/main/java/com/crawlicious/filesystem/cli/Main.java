@@ -51,20 +51,24 @@ public class Main {
      */
     public static void main(String[] args) {
         boolean quit = false;
-        Main m = new Main(new FileSystem());
-        while (!quit) {
-            System.out.print("> ");
-            System.out.flush();
-            BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
-            try {
-                String command = r.readLine();
-                if (command == null || command.equals("quit")) quit = true;
-                System.out.println(m.runCommand(command));
+        try {
+            Main m = new Main(new FileSystem());
+            while (!quit) {
+                System.out.print("> ");
                 System.out.flush();
-            } catch (IOException e) {
-                quit = true;
-                e.printStackTrace();
+                BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+                try {
+                    String command = r.readLine();
+                    if (command == null || command.equals("quit")) quit = true;
+                    System.out.println(m.runCommand(command));
+                    System.out.flush();
+                } catch (IOException e) {
+                    quit = true;
+                    e.printStackTrace();
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

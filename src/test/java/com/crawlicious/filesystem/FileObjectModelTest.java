@@ -30,11 +30,11 @@ public class FileObjectModelTest {
     
     @Test
     public void testDrive() throws PathExistsException, EntityMustBeContainedException, EntityNotContainerException, EntityNotContainableException, ChildParentCycleException {
-    	Drive c = new Drive("C");
+    	Drive c = new Drive(null, "C");
     	// make sure we get :'s
     	assertEquals("C:", c.getName());
     	assertEquals("C:/", c.getPath());
-    	Drive d = new Drive("D:");
+    	Drive d = new Drive(null, "D:");
     	// make sure we don't get extra :'s
     	assertEquals("D:", d.getName());
     	assertEquals("D:/", d.getPath());
@@ -48,14 +48,14 @@ public class FileObjectModelTest {
     	// test that right drive gets the file
     	assertEquals(0, c.getChildren().size());
     	assertEquals(0, d.getChildren().size());
-    	Folder f1 = new Folder("Documents");
+    	Folder f1 = new Folder(null, "Documents");
     	f1.setParent(c);    	
     	assertEquals(1, c.getChildren().size());
     	assertEquals(0, d.getChildren().size());
     	assertEquals(c.getChildren().iterator().next(), f1);  
     	// test no duplicates
     	try {
-    		TextFile t = new TextFile("Documents"); // duplicate name!!
+    		TextFile t = new TextFile(null, "Documents"); // duplicate name!!
     		t.setParent(c);
     		fail("should not allow dupe paths");
     	} catch (PathExistsException e) {
@@ -65,14 +65,14 @@ public class FileObjectModelTest {
     
     @Test 
     public void testTextFile() throws EntityMustBeContainedException, PathExistsException, EntityNotContainableException, EntityNotContainerException, ChildParentCycleException, NotATextFileException {
-    	Drive c = new Drive("Hungry");
-    	Folder items = new Folder("items");
+    	Drive c = new Drive(null, "Hungry");
+    	Folder items = new Folder(null, "items");
     	items.setParent(c);
     	
-    	TextFile hat = new TextFile("hat.txt");
+    	TextFile hat = new TextFile(null, "hat.txt");
     	hat.write("I want to eat\na hat now\n");
     	// test text
-    	TextFile glove = new TextFile("glove");
+    	TextFile glove = new TextFile(null, "glove");
     	String gloveMessage = "i'd rather have mittens!";
     	glove.write(gloveMessage);    	
     	assertEquals(gloveMessage, glove.getText());
@@ -97,7 +97,7 @@ public class FileObjectModelTest {
     		// pass
     	}
     	    	
-    	Folder drinks = new Folder("Drinks");
+    	Folder drinks = new Folder(null, "Drinks");
     	drinks.setParent(c);    	
     	assertEquals(2, c.getChildren().size());
  
@@ -116,10 +116,10 @@ public class FileObjectModelTest {
     	 *     - hot.txt  
     	 *       
     	 */
-    	Drive hungry = new Drive("Hungry");
-    	Folder food = new Folder("Food");
+    	Drive hungry = new Drive(null, "Hungry");
+    	Folder food = new Folder(null, "Food");
     	food.setParent(hungry); 
-    	TextFile pizza = new TextFile("pizza.txt");
+    	TextFile pizza = new TextFile(null, "pizza.txt");
     	String pizzaMessage = "I want to eat\nPizza now\n";
     	pizza.write(pizzaMessage);
     	pizza.setParent(food);
@@ -131,22 +131,22 @@ public class FileObjectModelTest {
     	assertEquals(pizzaMessage.length(), pizza.getSize());
     	
     	// test zip & nesting
-    	Folder drinks = new Folder("Drinks");    	
+    	Folder drinks = new Folder(null, "Drinks");    	
     	drinks.setParent(hungry);    	
     	assertEquals(2, hungry.getChildren().size());
     	
-    	ZipFile cold = new ZipFile("cold.zip");
+    	ZipFile cold = new ZipFile(null, "cold.zip");
     	cold.setParent(drinks);
     	
-    	ZipFile ice = new ZipFile("ice.zip");
+    	ZipFile ice = new ZipFile(null, "ice.zip");
     	ice.setParent(cold);
     	
-    	TextFile water = new TextFile("water.txt");
+    	TextFile water = new TextFile(null, "water.txt");
     	String waterMessage = "i like the clean cold water\nin my canteen\nbye!\n";
     	water.write(waterMessage);
     	water.setParent(ice);
     	
-    	TextFile hot = new TextFile("hot.txt");
+    	TextFile hot = new TextFile(null, "hot.txt");
     	String hotMessage = "Hot water is great for washing\n\nand hot cocoa\n\nand melting stuff\n";
     	hot.setText(hotMessage);
     	hot.setParent(drinks);

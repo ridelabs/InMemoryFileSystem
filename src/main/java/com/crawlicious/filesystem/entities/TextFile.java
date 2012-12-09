@@ -10,11 +10,17 @@
 
 package com.crawlicious.filesystem.entities;
 
+import com.crawlicious.filesystem.exceptions.ChildParentCycleException;
+import com.crawlicious.filesystem.exceptions.EntityMustBeContainedException;
+import com.crawlicious.filesystem.exceptions.EntityNotContainableException;
+import com.crawlicious.filesystem.exceptions.EntityNotContainerException;
+import com.crawlicious.filesystem.exceptions.PathExistsException;
+
 public class TextFile extends Entity {
     private StringBuilder builder = new StringBuilder();
 
-    public TextFile(String name) {
-        super(Entity.Type.TEXT_FILE, name);
+    public TextFile(ContainerEntity parent, String name) throws EntityNotContainableException, EntityNotContainerException, PathExistsException, EntityMustBeContainedException, ChildParentCycleException {
+        super(parent, Entity.Type.TEXT_FILE, name);
     }
 
     @Override

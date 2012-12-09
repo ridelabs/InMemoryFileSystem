@@ -33,6 +33,8 @@ public class FileSystemTest {
 		FileSystem fs = new FileSystem();
 		assertEquals(0, fs.getDrives().size());
 		fs.create(Type.DRIVE, null, "c");
+		assertEquals(1, fs.getDrives().size());
+		
 		assertEquals("c:", fs.getDrives().iterator().next());
 		
 		fs.create(Type.DRIVE, null, "d");
